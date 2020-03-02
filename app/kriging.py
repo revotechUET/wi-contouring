@@ -1,7 +1,5 @@
 import numpy as np
 import gstools as gs
-from pykrige.ok import OrdinaryKriging
-
 
 def kriging_fill_grid(input):
     """
@@ -25,13 +23,13 @@ def kriging_fill_grid(input):
         cov_model = gs.Gaussian(
             dim=2, len_scale=1, anis=0.2, angles=-0.5, var=0.5, nugget=0.1
         )
-        pk_kwargs = cov_model.pykrige_kwargs
-        OK = OrdinaryKriging(input['x'], input['y'], input['z'], **pk_kwargs)
-        ZI, ss = OK.execute("grid", XI, YI)
+        #pk_kwargs = cov_model.pykrige_kwargs
+        #OK = OrdinaryKriging(input['x'], input['y'], input['z'], **pk_kwargs)
+        #ZI, ss = OK.execute("grid", XI, YI)
+
+        OK2 = gs.krige.Ordinary(cov_model, [input['x'], input['y']], input['z'])
+        ZI, ss = OK2.structured([XI, YI])
         return ZI
     else:
         return None
-
-# conditioning data
-
 
